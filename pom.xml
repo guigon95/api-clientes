@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.guigon</groupId>
 	<artifactId>api-clientes</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<name>api-clientes</name>
 	<description>Api Clientes</description>
 	<url/>
@@ -54,6 +54,15 @@
 		<dependency>
 			<groupId>org.jetbrains.kotlinx</groupId>
 			<artifactId>kotlinx-coroutines-reactor</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>io.projectreactor.kafka</groupId>
+			<artifactId>reactor-kafka</artifactId>
 		</dependency>
 
 		<dependency>
