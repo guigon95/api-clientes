@@ -181,15 +181,7 @@ Here is an example of how to use the API to manage client information:
 
    ```json
    {
-     "id": "123e4567-e89b-12d3-a456-426614174000",
-     "nome": "João Silva",
-     "cpf": "123.456.789-00",
-     "idade": 80,
-     "data_nascimento": "1990-01-01",
-     "uf": "SP",
-     "renda_mensal": 2500.00,
-     "email": "joao.silva@example.com",
-     "telefone_whatsapp": "11999999999"
+     "id": "123e4567-e89b-12d3-a456-426614174000"
    }
    ```
 
