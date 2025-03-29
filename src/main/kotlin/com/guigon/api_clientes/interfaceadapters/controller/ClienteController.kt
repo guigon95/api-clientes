@@ -2,6 +2,7 @@ package com.guigon.api_clientes.interfaceadapters.controller
 
 import com.guigon.api_clientes.application.ports.ClienteUseCase
 import com.guigon.api_clientes.interfaceadapters.dto.ClienteDto
+import com.guigon.api_clientes.interfaceadapters.dto.ClienteResponse
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -17,9 +18,9 @@ class ClienteController(
     @PostMapping
     fun clientes(
         @RequestBody clienteDto: ClienteDto
-    ): UUID? {
+    ): ClienteResponse {
         clienteUseCase.sendMessage(clienteDto.toString())
 
-        return UUID.randomUUID()
+        return ClienteResponse(UUID.randomUUID())
     }
 }
