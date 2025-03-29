@@ -1,3 +1,4 @@
+```markdown
 # Api Clientes
 
 ## Description
@@ -28,6 +29,7 @@ This project is a REST API built with Kotlin and Spring Boot. The API provides f
 - **JUnit 5**: Framework for unit testing.
 - **Docker**: For containerizing the application.
 - **Swagger**: For API documentation.
+- **AssertJ**: For fluent assertions in tests.
 - **Slf4j**: For logging.
 
 ## ![Getting Started](https://img.icons8.com/fluency/19/000000/play.png) Getting Started
@@ -88,25 +90,58 @@ To run the application using Docker Compose, follow these steps:
 1. **Create a `docker-compose.yml` file:**
 
    ```yaml
-   version: '3.8'
+   version: '3'
    services:
-     api-clientes:
-       build: .
+     zookeeper:
+       image: confluentinc/cp-zookeeper:latest
+       networks:
+         - broker-kafka
+       environment:
+         ZOOKEEPER_CLIENT_PORT: 2181
+         ZOOKEEPER_TICK_TIME: 2000
+
+     kafka:
+       image: confluentinc/cp-kafka:latest
+       networks:
+         - broker-kafka
+       depends_on:
+         - zookeeper
        ports:
-         - "8080:8080"
+         - 9092:9092
+       environment:
+         KAFKA_BROKER_ID: 1
+         KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+         KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+         KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+         KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+         KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+     kafdrop:
+       image: obsidiandynamics/kafdrop:latest
+       networks:
+         - broker-kafka
        depends_on:
          - kafka
-     kafka:
-       image: wurstmeister/kafka:latest
        ports:
-         - "9092:9092"
+         - 19000:9000
        environment:
-         KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
-         KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-     zookeeper:
-       image: wurstmeister/zookeeper:latest
+         KAFKA_BROKERCONNECT: kafka:29092
+
+     api-clientes:
+       image: guigon95/api-clientes:latest
+       networks:
+         - broker-kafka
+       depends_on:
+         - kafka
        ports:
-         - "2181:2181"
+         - 8082:8082
+       environment:
+         SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+         SPRING_APPLICATION_PORT: 8082
+
+   networks:
+     broker-kafka:
+       driver: bridge
    ```
 
 2. **Run Docker Compose:**
@@ -181,7 +216,15 @@ Here is an example of how to use the API to manage client information:
 
    ```json
    {
-     "id": "123e4567-e89b-12d3-a456-426614174000"
+     "id": "123e4567-e89b-12d3-a456-426614174000",
+     "nome": "João Silva",
+     "cpf": "123.456.789-00",
+     "idade": 80,
+     "data_nascimento": "1990-01-01",
+     "uf": "SP",
+     "renda_mensal": 2500.00,
+     "email": "joao.silva@example.com",
+     "telefone_whatsapp": "11999999999"
    }
    ```
 
@@ -194,3 +237,4 @@ link: http://localhost:8080/swagger-ui/index.html
 
 ### ![License](https://img.icons8.com/fluency/19/000000/law.png) License
 This project is licensed under the Apache 2.0 License - see the LICENSE file for details.
+```
